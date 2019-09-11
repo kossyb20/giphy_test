@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Giphy</title>
+    <style>
+    body{
+        margin: 50px;
+    }
+    </style>
+</head>
+<body>
+    
+    <h1>Get Gif</h1>
+    <form>
+        <label for="gifText">Enter keyword</label>
+        <input type="text" id="gifText" name="gifText">
+        <button type="submit">Get</button>
+    </form><br>
+    <div id="result"></div>
+
+
+
+    <script> 
+        document.querySelector('form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        var text = document.getElementById('gifText').value
+        console.log(text)
+        let waiting = document.createElement("span");
+        waiting.innerText = 'Searching all of the internet  ...'
+        let div = document.getElementById("result")
+        div.appendChild(waiting);
+
+        var url = "http://api.giphy.com/v1/gifs/search?q="+text+"&api_key=YhUczsswL3EmvDC0PFqwTDzjeQ26KTqB&limit=1"
+        fetch(url)
+        .then((response) => response.json())
+        .then(function(data) {
+            let result = data.data[0]
+            let gif = result.images.downsized.url
+            let height = result.images.downsized.height
+            let width = result.images.downsized.width
+            let alt = result.slug
+            
+            let img = document.createElement("img");
+            img.setAttribute("src", gif);
+            img.setAttribute("height", height);
+            img.setAttribute("width", width);
+            img.setAttribute("alt", alt);
+            div.appendChild(img);
+            div.removeChild(waiting)
+            
+            
+        })
+        .catch(function(error) {
+            alert('An error has happened. Please check your internet connection');
+        });  
+
+        });
+
+    </script>
+</body>
+</html>
